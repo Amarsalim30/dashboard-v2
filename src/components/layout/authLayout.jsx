@@ -2,7 +2,7 @@ export default function AuthLayout({ children }) {
     return (
          <div
       className=
-        "min-h-screen flex items-center justify-center bg-cover bg-right"
+        "min-h-screen flex items-center justify-center bg-cover bg-center oklch(79.2% 0.209 151.711)"
       style={{ backgroundImage: "url('/highCity.jpg')" }}
       >
     <div
