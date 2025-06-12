@@ -1,3 +1,5 @@
+'use client';
+import React, { useState } from "react";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -8,6 +10,46 @@ export function LoginForm({
   className,
   ...props
 }) {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password} = formData;
+    setError("");
+    setLoading(true);
+
+    try {
+      if (!name.trim() || !email.trim() || !password || !confirmPassword) {
+        throw new Error("All fields are required.");
+      }
+
+      if (password !== confirmPassword) {
+        throw new Error("Passwords do not match.");
+      }
+
+      console.log("Registering with:", formData);
+
+      setFormData({
+        email: "",
+        password: "",
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -18,7 +60,7 @@ export function LoginForm({
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
           </div>
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -28,17 +70,32 @@ export function LoginForm({
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+                <Input
+                 id="email" 
+                 type="email"
+                 name="email"
+                 value={formData.email}
+                 onChange={handleChange}
+                 placeholder="m@example.com" 
+                 autoComplete="email"
+                 required />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a href="#" className="ml-auto text-sm underline-offset-2 hover:underline">
-                    Forgot your password?
-                  </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                 id="password" 
+                 type="password" 
+                 name="password"
+                 value={formData.password}
+                 onChange={handleChange}
+                 placeholder="your password"
+                 required />
               </div>
+              <a href="#" className="ml-auto text-xs underline-offset-2 hover:underline">
+                    Forgot password?
+                  </a>
               <Button type="submit" className="w-full">
                 Login
               </Button>
@@ -85,7 +142,7 @@ export function LoginForm({
         </CardContent>
       </Card>
       <div
-        className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+        className="*:[a]:hover:text-secondary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </div>
